@@ -64,6 +64,19 @@ namespace BitStore.Server
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserContext, UserContext>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder
+                        .WithOrigins("http://localhost:52134")  // Your Vue app URL
+                        .AllowAnyMethod()                       // Allows OPTIONS
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("*");
+                });
+            });
+
+            // Make sure to add this BEFORE app.UseAuthorization() but after UseRouting
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
@@ -79,6 +92,7 @@ namespace BitStore.Server
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            app.UseCors();
 
             app.Run();
         }

@@ -7,10 +7,11 @@ public class CoreService : ICoreService
 {
     private readonly IBitstampService _bitstamp;
     private readonly IConfiguration _configuration;
-    private OrderBook? _latestOrderBook;
+    
+    public const string BtcSymbol = "BTC";
     private readonly string _currency;
 
-    public const string BtcSymbol = "BTC";
+    private OrderBook? _latestOrderBook;
 
     public CoreService(
         IBitstampService bitstamp,
