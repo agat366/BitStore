@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36401.2 d17.14
+VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Server", "BitStore.Server\BitStore.Server.csproj", "{EC16A9AC-E11D-471D-9A41-44D903588238}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Data", "BitStore.Data\BitStore.Data.csproj", "{6191E02D-8FB3-452E-9E82-72615D7F823B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Bitstamp", "BitStore.Bitstamp\BitStore.Bitstamp.csproj", "{52E71E7A-6445-4180-9FB1-2D65E39370C6}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "bitstore.client", "bitstore.client\bitstore.client.esproj", "{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{52E71E7A-6445-4180-9FB1-2D65E39370C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52E71E7A-6445-4180-9FB1-2D65E39370C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52E71E7A-6445-4180-9FB1-2D65E39370C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
