@@ -6,6 +6,8 @@
 
         public IEnumerable<OrderBookEntry> Bids { get; set; } = [];
         public IEnumerable<OrderBookEntry> Asks { get; set; } = [];
+        public string PrimaryCurrency { get; set; }
+        public string SecondaryCurrency { get; set; }
     }
 
     public class OrderBookEntry

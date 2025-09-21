@@ -7,7 +7,8 @@ public class CoreService : ICoreService
 {
     private readonly IBitstampService _bitstamp;
     private readonly IConfiguration _configuration;
-    
+    private readonly IStorageService _storage;
+
     public const string BtcSymbol = "BTC";
     private readonly string _currency;
 
@@ -15,12 +16,14 @@ public class CoreService : ICoreService
 
     public CoreService(
         IBitstampService bitstamp,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IStorageService storage)
     {
         _bitstamp = bitstamp;
         _configuration = configuration;
+        _storage = storage;
 
-        _currency = _configuration.PrimaryCurrency;
+        _currency = _configuration.SecondaryCurrency;
     }
 
     public async Task PollDataAsync(CancellationToken cancellationToken)
@@ -31,7 +34,19 @@ public class CoreService : ICoreService
 
     public async Task<OrderBook?> GetLatestOrderBookAsync(string userId)
     {
-        // todo: store audit log
+        var latestOrderBook = _latestOrderBook;
+        if (latestOrderBook == null)
+        {
+            await PollDataAsync(CancellationToken.None);
+        }
+
+        if (latestOrderBook != null)
+        {
+            var requestedAt = DateTimeOffset.UtcNow;
+#pragma warning disable CS4014 // We must not wait until the snapshot is stored, doing that in the background
+            Task.Run(() => _storage.StoreSnapshotForUserAsync(latestOrderBook, userId, requestedAt));
+#pragma warning restore CS4014
+        }
 
         return _latestOrderBook;
     }

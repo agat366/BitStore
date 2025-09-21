@@ -34,6 +34,8 @@ namespace BitStore.Bitstamp.Services
 
                 return new OrderBook
                 {
+                    PrimaryCurrency = currencyFrom.ToUpper(),
+                    SecondaryCurrency = currencyTo.ToUpper(),
                     Timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(response.Timestamp)),
                     Bids = ParseOrderBookEntries(response.Bids),
                     Asks = ParseOrderBookEntries(response.Asks)

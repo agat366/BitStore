@@ -81,12 +81,12 @@
                   'border-danger text-danger': tradeType === 'sell'
                 }"
                 v-model="amount"
-                placeholder="Enter BTC amount"
+                :placeholder="`Enter ${data?.primaryCurrency } amount`"
                 step="0.1"
                 min="0"
                 @input="calculateTotal"
               >
-              <span class="input-group-text">BTC</span>
+              <span class="input-group-text">{{ data?.primaryCurrency }}</span>
             </div>
           </div>
 
@@ -98,9 +98,9 @@
                 'text-success': tradeType === 'buy',
                 'text-danger': tradeType === 'sell'
               }">
-                {{ formatPrice(totalCost) }} USD
+                {{ formatPrice(totalCost) }} {{ data?.secondaryCurrency }}
                 <span class="text-muted ms-2" v-if="totalCost > 0">
-                  ({{ formatPrice(avgPrice) }} per BTC)
+                  ({{ formatPrice(avgPrice) }} per {{ data?.primaryCurrency }})
                 </span>
               </span>
             </div>

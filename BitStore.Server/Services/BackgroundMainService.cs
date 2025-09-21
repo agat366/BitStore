@@ -7,8 +7,8 @@ public class PollingSettings
 {
     public const string SectionName = "PollingSettings";
     
-    public string PrimaryCurrency { get; set; } = "EUR";
-    public int UpdateIntervalSeconds { get; set; } = 30;
+    public string SecondaryCurrency { get; set; } = "EUR";
+    public int UpdateIntervalSeconds { get; set; } = 2;
 }
 
 public class BackgroundMainService : BackgroundService

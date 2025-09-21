@@ -55,11 +55,12 @@ namespace BitStore.Server
             builder.Services.AddSingleton<IConfiguration>(provider =>
             {
                 var config = provider.GetRequiredService<Microsoft.Extensions.Options.IOptions<PollingSettings>>().Value;
-                return new Configuration(config.PrimaryCurrency);
+                return new Configuration(config.SecondaryCurrency);
             });
 
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ICoreService, CoreService>();
+            builder.Services.AddSingleton<IStorageService, StorageService>();
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserContext, UserContext>();
