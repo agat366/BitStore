@@ -28,5 +28,10 @@ public class CoreService : ICoreService
         _latestOrderBook = orderBook;
     }
 
-    public OrderBook? GetLatestOrderBook() => _latestOrderBook;
+    public async Task<OrderBook?> GetLatestOrderBookAsync(string userId)
+    {
+        // todo: store audit log
+
+        return _latestOrderBook;
+    }
 }

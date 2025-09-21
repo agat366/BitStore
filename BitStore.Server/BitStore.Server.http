@@ -4,3 +4,22 @@ GET {{BitStore.Server_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+@hostname=localhost
+@port=5000
+@host={{hostname}}:{{port}}
+@contentType=application/json
+
+### Login
+POST https://{{host}}/auth/login
+Content-Type: {{contentType}}
+
+{
+    "username": "testuser"
+}
+
+### Get Data (Protected)
+GET https://{{host}}/data
+Authorization: Bearer {{auth_token}}
+
+# Response

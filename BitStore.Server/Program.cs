@@ -1,8 +1,12 @@
 using BitStore.Bitstamp.Services;
 using BitStore.Core.Services;
+using BitStore.Server.Context;
 using BitStore.Server.Handlers;
 using BitStore.Server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using IConfiguration = BitStore.Core.Services.IConfiguration;
 
 namespace BitStore.Server
@@ -19,6 +23,23 @@ namespace BitStore.Server
             {
                 options.FormatterName = ConsoleFormatterNames.Simple;
             });
+
+            // Configure JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key")))
+                    };
+                });
 
             // Add services to the container.
             builder.Services.Configure<PollingSettings>(
@@ -37,10 +58,14 @@ namespace BitStore.Server
                 return new Configuration(config.PrimaryCurrency);
             });
 
+            builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<ICoreService, CoreService>();
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IUserContext, UserContext>();
+
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-
-            builder.Services.AddSingleton<ICoreService, CoreService>();
 
             var app = builder.Build();
 
@@ -51,6 +76,7 @@ namespace BitStore.Server
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
 

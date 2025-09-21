@@ -6,5 +6,5 @@ namespace BitStore.Core.Services;
 public interface ICoreService
 {
     Task PollDataAsync(CancellationToken cancellationToken);
-    OrderBook? GetLatestOrderBook();
+    Task<OrderBook?> GetLatestOrderBookAsync(string userId);
 }
