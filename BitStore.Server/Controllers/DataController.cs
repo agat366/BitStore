@@ -6,19 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BitStore.Server.Controllers
 {
+    /// <summary>
+    /// Controller providing access to order book data.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DataController : ControllerBase
     {
-        private readonly ILogger<DataController> _logger;
         private readonly IUserContext _user;
         private readonly ICoreService _coreService;
 
-        public DataController(ICoreService coreService, ILogger<DataController> logger, IUserContext user)
+        public DataController(ICoreService coreService, IUserContext user)
         {
             _coreService = coreService;
-            _logger = logger;
             _user = user;
         }
 

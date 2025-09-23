@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BitStore.Bitstamp\BitStore.Bitstamp.csproj" />
+    <ProjectReference Include="..\BitStore.Data\BitStore.Data.csproj" />
   </ItemGroup>
+
 
 </Project>

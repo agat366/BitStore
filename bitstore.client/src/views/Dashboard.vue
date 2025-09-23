@@ -9,13 +9,13 @@
       </button>
     </div>
 
-    <div v-if="loading" class="text-secondary">
+    <div v-show="loading" class="text-secondary">
       Loading data...
     </div>
-    <div v-else-if="error" class="alert alert-danger">
+    <div v-if="error" class="alert alert-danger">
       {{ error }}
     </div>
-    <div v-else class="card">
+    <div v-if="data" class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Order Book</span>
         <div class="d-flex align-items-center">
@@ -59,7 +59,7 @@
         <div class="row align-items-center">
           <!-- Trade Type Selection -->
           <div class="col-auto">
-            <div class="btn-group-vertical" role="group">
+            <div class="btn-group-horizontal" role="group">
               <input type="radio" class="btn-check" name="tradeType" id="buyOption" value="buy"
                      v-model="tradeType" checked>
               <label class="btn btn-outline-success" for="buyOption">Buy</label>
@@ -182,6 +182,8 @@ function formatPrice(price: number): string {
 }
 
 async function fetchData() {
+  if (loading.value) return
+
   loading.value = true
   error.value = ''
 
@@ -222,6 +224,8 @@ function startRefreshTimer() {
   }, 10000)
 
   spinnerInterval = setInterval(() => {
+    if(loading.value) return
+
     timeToRefresh.value = Math.max(0, timeToRefresh.value - 0.1)
     updateSpinnerOffset()
   }, 100)

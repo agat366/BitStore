@@ -1,10 +1,10 @@
 namespace BitStore.Server.Services;
 
 /// <summary>
-/// Service for JWT token generation and validation
+/// Defines authentication operations for user management and token handling.
 /// </summary>
 public interface IAuthService
 {
-    string GenerateToken(string username);
-    bool ValidateToken(string token);
+    Task<string> GenerateToken(string username);
+    Task<bool> ValidateToken(string token);
 }

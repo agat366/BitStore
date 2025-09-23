@@ -2,6 +2,9 @@
 
 namespace BitStore.Bitstamp.Dto;
 
+/// <summary>
+/// DTO for deserializing Bitstamp API order book response.
+/// </summary>
 public class BitstampOrderBook
 {
     [JsonPropertyName("timestamp")]

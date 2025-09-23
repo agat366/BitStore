@@ -2,6 +2,9 @@ using System.Net.Http.Headers;
 
 namespace BitStore.Server.Handlers;
 
+/// <summary>
+/// HTTP message handler that provides detailed request/response logging.
+/// </summary>
 public class LoggingHandler : DelegatingHandler
 {
     private readonly ILogger<LoggingHandler> _logger;

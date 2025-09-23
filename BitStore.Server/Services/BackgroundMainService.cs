@@ -3,28 +3,23 @@ using Microsoft.Extensions.Options;
 
 namespace BitStore.Server.Services;
 
-public class PollingSettings
-{
-    public const string SectionName = "PollingSettings";
-    
-    public string SecondaryCurrency { get; set; } = "EUR";
-    public int UpdateIntervalSeconds { get; set; } = 2;
-}
-
+/// <summary>
+/// Background service that periodically polls and updates order book data.
+/// </summary>
 public class BackgroundMainService : BackgroundService
 {
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<BackgroundMainService> _logger;
-    private readonly ICoreService _coreService;
     private readonly PollingSettings _settings;
 
     public BackgroundMainService(
+        IServiceScopeFactory scopeFactory,
         ILogger<BackgroundMainService> logger,
-        IOptions<PollingSettings> options,
-        ICoreService coreService)
+        IOptions<PollingSettings> settings)
     {
+        _scopeFactory = scopeFactory;
         _logger = logger;
-        _coreService = coreService;
-        _settings = options.Value;
+        _settings = settings.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,11 +28,13 @@ public class BackgroundMainService : BackgroundService
         {
             try
             {
-                await _coreService.PollDataAsync(stoppingToken);
+                using var scope = _scopeFactory.CreateScope();
+                var coreService = scope.ServiceProvider.GetRequiredService<ICoreService>();
+                await coreService.PollDataAsync(stoppingToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error polling data.");
+                _logger.LogError(ex, "Error occurred while polling data");
             }
 
             await Task.Delay(TimeSpan.FromSeconds(_settings.UpdateIntervalSeconds), stoppingToken);

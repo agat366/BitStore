@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Data", "BitStore.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Bitstamp", "BitStore.Bitstamp\BitStore.Bitstamp.csproj", "{52E71E7A-6445-4180-9FB1-2D65E39370C6}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "bitstore.client", "bitstore.client\bitstore.client.esproj", "{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BitStore.Client", "BitStore.Client\BitStore.Client.esproj", "{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +41,10 @@ Global
 		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DA849E11-9FA4-4410-9017-9527C1403AF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA849E11-9FA4-4410-9017-9527C1403AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA849E11-9FA4-4410-9017-9527C1403AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA849E11-9FA4-4410-9017-9527C1403AF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
