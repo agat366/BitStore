@@ -100,6 +100,8 @@ The app will be available at `http://localhost:52134` by default
 - Unit tests available for core services
 - Database migrations are automatically applied in development and should be applied manually in production using one of the methods described above
 
+**Please also take a look at the [code conventions](./CODE_STYLE.md) used in the project. **
+
 ![Login](./docs/images/app-login.jpg)
 ![Dashboard](./docs/images/app-dashboard.jpg)
 ![Not enough liquidity warning](./docs/images/app-dashboard-warning.jpg)
