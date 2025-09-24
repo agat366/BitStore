@@ -1,3 +1,5 @@
+import { APP_SETTINGS } from "@/config/settings";
+
 interface OrderItem {
   price: number;
   amount: number;
@@ -9,7 +11,7 @@ interface OrderBar {
   percentage: number;
 }
 
-export function aggregateOrders(orders: OrderItem[], groupCount: number = 10): OrderBar[] {
+export function aggregateOrders(orders: OrderItem[], groupCount: number = APP_SETTINGS.orderBook.aggregationCount): OrderBar[] {
   if (!orders.length) return [];
 
   // Sort orders by price (ascending for asks, descending for bids)

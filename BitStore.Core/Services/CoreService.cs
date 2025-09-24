@@ -44,16 +44,29 @@ public class CoreService : ICoreService
         if (string.IsNullOrWhiteSpace(userId))
             throw new Exception("UserId is empty.");
 
-        var latestOrderBook = _latestOrderBook;
+        var result = _latestOrderBook;
         // it's theoretically possible if to quick call this method after startup that the data is not yet polled
-        if (latestOrderBook == null)
+        if (result == null)
         {
             await PollDataAsync(CancellationToken.None);
-            latestOrderBook = _latestOrderBook;
+            result = _latestOrderBook;
         }
 
-        if (latestOrderBook != null)
+        if (result != null)
         {
+            // Filter out bids with price <= 1000 for the demo presentation purposes.
+            // The reason is that there is a huge amount of bids with tiny price to "catch" the BTC momentary fall.
+            // That brings a big disproportion to other bars.
+            // In a real-world scenario, we would not do this and do improve the bars presentation.
+            result = new OrderBook
+            {
+                PrimaryCurrency = result.PrimaryCurrency,
+                SecondaryCurrency = result.SecondaryCurrency,
+                Timestamp = result.Timestamp,
+                Bids = result.Bids.Where(x => x.Price > 1000).ToArray(),
+                Asks = result.Asks.ToList()
+            };
+
             var requestedAt = DateTimeOffset.UtcNow;
             // Create a new scope for data operations as IDataService is scoped in general
             using var scope = _scopeFactory.CreateScope();
@@ -65,7 +78,7 @@ public class CoreService : ICoreService
                 {
                     using var storageScope = _scopeFactory.CreateScope();
                     var storageService = storageScope.ServiceProvider.GetRequiredService<IDataService>();
-                    await storageService.StoreSnapshotForUserAsync(latestOrderBook, Guid.Parse(userId), requestedAt);
+                    await storageService.StoreSnapshotForUserAsync(result, Guid.Parse(userId), requestedAt);
                 }
                 catch (Exception ex)
                 {
@@ -75,6 +88,6 @@ public class CoreService : ICoreService
 #pragma warning restore CS4014
         }
 
-        return latestOrderBook;
+        return result;
     }
 }

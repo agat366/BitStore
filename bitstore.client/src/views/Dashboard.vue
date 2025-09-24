@@ -9,7 +9,7 @@
       </button>
     </div>
 
-    <div v-show="loading" class="text-secondary">
+    <div class="text-secondary" :style="{ visibility: loading ? 'visible' : 'hidden' }">
       Loading data...
     </div>
     <div v-if="error" class="alert alert-danger">
@@ -17,7 +17,7 @@
     </div>
     <div v-if="data" class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span>Order Book</span>
+        <span>{{ data?.primaryCurrency + '/' + data?.secondaryCurrency }}</span>
         <div class="d-flex align-items-center">
           <div class="countdown-spinner me-3" v-if="!loading">
             <svg width="20" height="20" viewBox="0 0 20 20">
@@ -93,15 +93,18 @@
           <!-- Total Cost Display -->
           <div class="col-auto ms-3">
             <div class="h5 mb-0">
-              <span class="text-muted">Total:</span>
-              <span :class="{
+              <span class="text-muted">Total: </span>
+              <span v-if="!notEnoughLiquidity" :class="{
                 'text-success': tradeType === 'buy',
                 'text-danger': tradeType === 'sell'
               }">
                 {{ formatPrice(totalCost) }} {{ data?.secondaryCurrency }}
-                <span class="text-muted ms-2" v-if="totalCost > 0">
+                <span class="text-muted ms-2 small" v-if="totalCost > 0">
                   ({{ formatPrice(avgPrice) }} per {{ data?.primaryCurrency }})
                 </span>
+              </span>
+              <span v-else class="text-warning">
+                Not enough liquidity
               </span>
             </div>
           </div>
@@ -115,20 +118,29 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { API_BASE_URL } from '@/config'
 import OrderBook from '@/components/OrderBook.vue'
+import { ApiService } from '@/services/apiService'
 
 type Timer = ReturnType<typeof setInterval>
 
-interface Order {
-  price: number
-  amount: number
-}
-
 const router = useRouter()
 const authStore = useAuthStore()
+const apiService = new ApiService()
 
-const data = ref(null)
+interface Order {
+  price: number;
+  amount: number;
+}
+
+interface OrderBookData {
+  asks: Order[];
+  bids: Order[];
+  primaryCurrency: string;
+  secondaryCurrency: string;
+  timestamp: string;
+}
+
+const data = ref<OrderBookData | null>(null)
 const loading = ref(false)
 const error = ref('')
 const timeToRefresh = ref(10)
@@ -139,6 +151,7 @@ const tradeType = ref('buy')
 const amount = ref('')
 const totalCost = ref(0)
 const avgPrice = ref(0)
+const notEnoughLiquidity = ref(false)
 
 // Calculate total cost based on order book
 function calculateTotal() {
@@ -146,12 +159,14 @@ function calculateTotal() {
   if (isNaN(amountNum) || amountNum <= 0) {
     totalCost.value = 0
     avgPrice.value = 0
+    notEnoughLiquidity.value = false
     return
   }
 
   const orders = tradeType.value === 'buy' ? data.value?.asks : data.value?.bids
   if (!orders?.length) {
     totalCost.value = 0
+    notEnoughLiquidity.value = false
     return
   }
 
@@ -170,11 +185,13 @@ function calculateTotal() {
     // Not enough liquidity
     totalCost.value = 0
     avgPrice.value = 0
+    notEnoughLiquidity.value = true
     return
   }
 
   totalCost.value = total
   avgPrice.value = total / amountNum
+  notEnoughLiquidity.value = false
 }
 
 function formatPrice(price: number): string {
@@ -184,25 +201,25 @@ function formatPrice(price: number): string {
 async function fetchData() {
   if (loading.value) return
 
+  stopRefreshTimer()
+
   loading.value = true
   error.value = ''
 
   try {
-    const response = await fetch(`${API_BASE_URL}/data`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.token}`
-      }
-    })
+    const result = await apiService.getData()
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch data')
+    if (result.success && 'data' in result) {
+      data.value = result.data
+    } else if ('error' in result && result.error) {
+      error.value = result.error
     }
-
-    data.value = await response.json()
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'An error occurred'
+    error.value = 'An unexpected error occurred'
+    console.error(e)
   } finally {
     loading.value = false
+    startRefreshTimer()
   }
 }
 
@@ -215,8 +232,7 @@ function startRefreshTimer() {
   timeToRefresh.value = 10
   updateSpinnerOffset()
 
-  if (refreshTimer) clearInterval(refreshTimer)
-  if (spinnerInterval) clearInterval(spinnerInterval)
+  stopRefreshTimer()
 
   refreshTimer = setInterval(() => {
     fetchData()
@@ -224,11 +240,20 @@ function startRefreshTimer() {
   }, 10000)
 
   spinnerInterval = setInterval(() => {
-    if(loading.value) return
-
     timeToRefresh.value = Math.max(0, timeToRefresh.value - 0.1)
     updateSpinnerOffset()
   }, 100)
+}
+
+function stopRefreshTimer() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer)
+    refreshTimer = null
+  }
+  if (spinnerInterval) {
+    clearInterval(spinnerInterval)
+    spinnerInterval = null
+  }
 }
 
 function updateSpinnerOffset() {
@@ -253,6 +278,7 @@ onUnmounted(() => {
   if (spinnerInterval) clearInterval(spinnerInterval)
 })
 
-// Recalculate total when trade type changes
+// Recalculate total when trade type or data changes
 watch(tradeType, calculateTotal)
+watch(data, calculateTotal)
 </script>

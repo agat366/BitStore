@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { aggregateOrders } from '@/utils/orderBookUtils';
+import { APP_SETTINGS } from '@/config/settings';
 import OrderBookBar from './OrderBookBar.vue';
 
 interface Props {
@@ -50,11 +51,11 @@ const props = defineProps<Props>();
 
 const aggregatedBids = computed(() => {
   // Reverse bids to show in descending order
-  return aggregateOrders(props.bids, 10);
+  return aggregateOrders(props.bids, APP_SETTINGS.orderBook.aggregationCount);
 });
 
 const aggregatedAsks = computed(() => {
-  return aggregateOrders(props.asks, 10);
+  return aggregateOrders(props.asks, APP_SETTINGS.orderBook.aggregationCount);
 });
 </script>
 
