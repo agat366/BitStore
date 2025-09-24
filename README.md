@@ -99,3 +99,7 @@ The app will be available at `http://localhost:52134` by default
 - Set logging level to "Trace" for detailed HTTP logging
 - Unit tests available for core services
 - Database migrations are automatically applied in development and should be applied manually in production using one of the methods described above
+
+![Login](docs/images/app-login.png)
+![Dashboard](docs/images/app-dashboard.png)
+![Not enough liquidity warning](docs/images/app-dashboard-warning.png)
