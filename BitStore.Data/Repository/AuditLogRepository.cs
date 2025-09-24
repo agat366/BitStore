@@ -3,17 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BitStore.Data.Repository;
 
-/// <summary>
-/// Implements audit log data persistence operations using Entity Framework Core.
-/// </summary>
-public class AuditLogRepository : IAuditLogRepository
+/// <inheritdoc cref="IAuditLogRepository" />
+public class AuditLogRepository(BitStoreDbContext context) : IAuditLogRepository
 {
-    private readonly BitStoreDbContext _context;
-
-    public AuditLogRepository(BitStoreDbContext context)
-    {
-        _context = context;
-    }
+    private readonly BitStoreDbContext _context = context;
 
     public async Task<AuditLog> CreateAsync(AuditLog auditLog)
     {

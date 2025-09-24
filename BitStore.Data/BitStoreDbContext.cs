@@ -6,13 +6,8 @@ namespace BitStore.Data;
 /// <summary>
 /// Entity Framework DbContext for BitStore database operations.
 /// </summary>
-public class BitStoreDbContext : DbContext
+public class BitStoreDbContext(DbContextOptions<BitStoreDbContext> options) : DbContext(options)
 {
-    public BitStoreDbContext(DbContextOptions<BitStoreDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<User> Users { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
 

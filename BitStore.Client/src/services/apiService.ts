@@ -7,6 +7,7 @@ export class ApiService {
   private authStore = useAuthStore()
   private router = useRouter()
 
+  // loading the app primary data
   async getData() {
     return axios.get(`${API_BASE_URL}/data`, {
       headers: {

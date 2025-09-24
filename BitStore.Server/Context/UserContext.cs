@@ -2,26 +2,14 @@
 
 namespace BitStore.Server.Context;
 
-/// <summary>
-/// Provides access to current user's claims from HTTP context
-/// </summary>
-/// <remarks>
-/// Implementation of IUserContext that extracts user information from HTTP context.
-/// </remarks>
-public class UserContext : IUserContext
+/// <inheritdoc cref="IUserContext" />
+public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
-    /// <summary>
-    /// Extracts user identity details from claims.
-    /// </summary>
-    /// <param name="accessor"></param>
-    public UserContext(IHttpContextAccessor accessor)
-    {
-        var user = accessor.HttpContext?.User;
-        Username = user?.Identity?.Name
-                   ?? user?.FindFirst("name")?.Value;
-        UserId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    }
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public string Username { get; }
-    public string UserId { get; }
+    public string Username => _httpContextAccessor.HttpContext?.User?.Identity?.Name 
+        ?? throw new InvalidOperationException("User not authenticated");
+
+    public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value 
+        ?? throw new InvalidOperationException("User ID not found in claims");
 }

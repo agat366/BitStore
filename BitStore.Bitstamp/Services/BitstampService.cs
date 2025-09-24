@@ -4,9 +4,7 @@ using BitStore.Bitstamp.Models;
 
 namespace BitStore.Bitstamp.Services
 {
-    /// <summary>
-    /// An implementation of the operations for interacting with the Bitstamp cryptocurrency exchange API.
-    /// </summary>
+    /// <inheritdoc cref="IBitstampService" />
     public class BitstampService : IBitstampService
     {
         private readonly HttpClient _httpClient;

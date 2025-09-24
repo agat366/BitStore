@@ -1,14 +1,7 @@
 ﻿namespace BitStore.Core.Services;
 
-/// <summary>
-/// Implementation of IConfiguration that provides application settings.
-/// </summary>
-public class Configuration : IConfiguration
+/// <inheritdoc cref="IConfiguration" />
+public class Configuration(string secondaryCurrency) : IConfiguration
 {
-    public Configuration(string secondaryCurrency)
-    {
-        SecondaryCurrency = secondaryCurrency;
-    }
-
-    public string SecondaryCurrency { get; }
+    public string SecondaryCurrency { get; } = secondaryCurrency;
 }

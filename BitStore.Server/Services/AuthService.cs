@@ -7,28 +7,20 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace BitStore.Server.Services;
 
-/// <summary>
-/// Handles user authentication and JWT token management.
-/// </summary>
-public class AuthService : IAuthService
+/// <inheritdoc cref="IAuthService" />
+public class AuthService(
+    IConfiguration configuration,
+    IDataService dataService,
+    ILogger<AuthService> logger)
+    : IAuthService
 {
-    private readonly string _secretKey;
-    private readonly string _issuer;
-    private readonly string _audience;
-    private readonly IDataService _dataService;
-    private readonly ILogger<AuthService> _logger;
+    private readonly IConfiguration _configuration = configuration;
+    private readonly IDataService _dataService = dataService;
+    private readonly ILogger<AuthService> _logger = logger;
 
-    public AuthService(
-        IConfiguration configuration,
-        IDataService dataService,
-        ILogger<AuthService> logger)
-    {
-        _secretKey = configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key must be configured");
-        _issuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer must be configured");
-        _audience = configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience must be configured");
-        _dataService = dataService;
-        _logger = logger;
-    }
+    private readonly string _secretKey = configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key must be configured");
+    private readonly string _issuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer must be configured");
+    private readonly string _audience = configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience must be configured");
 
     public async Task<string> GenerateToken(string username)
     {

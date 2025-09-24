@@ -8,6 +8,9 @@ using Xunit;
 
 namespace BitStore.Core.Tests.Services;
 
+/// <summary>
+/// Tests covering key logic of <see cref="DataService"/>.
+/// </summary>
 public class DataServiceTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;

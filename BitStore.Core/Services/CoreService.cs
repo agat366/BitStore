@@ -5,9 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BitStore.Core.Services;
 
-/// <summary>
-/// Core service handling order book data management and data storage.
-/// </summary>
+/// <inheritdoc cref="ICoreService" />
 public class CoreService : ICoreService
 {
     private readonly IBitstampService _bitstamp;

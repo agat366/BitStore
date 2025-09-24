@@ -5,26 +5,14 @@ using BitStore.Data.Repository;
 
 namespace BitStore.Core.Services;
 
-/// <summary>
-/// Implementation of data service for storing order book snapshots and user data.
-/// </summary>
-public class DataService : IDataService
+/// <inheritdoc cref="IDataService" />
+public class DataService(
+    IAuditLogRepository auditLogRepository,
+    IUserRepository userRepository)
+    : IDataService
 {
-    private readonly IAuditLogRepository _auditLogRepository;
-    private readonly IUserRepository _userRepository;
-
-    public DataService(
-        IAuditLogRepository auditLogRepository,
-        IUserRepository userRepository)
-    {
-        _auditLogRepository = auditLogRepository;
-        _userRepository = userRepository;
-    }
-
-    public async Task<User?> GetUserByIdAsync(Guid id)
-    {
-        return await _userRepository.GetByIdAsync(id);
-    }
+    private readonly IAuditLogRepository _auditLogRepository = auditLogRepository;
+    private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<User?> GetUserByLoginAsync(string login)
     {

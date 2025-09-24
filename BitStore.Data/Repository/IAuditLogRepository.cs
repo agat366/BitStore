@@ -3,7 +3,7 @@ using BitStore.Data.Entities;
 namespace BitStore.Data.Repository;
 
 /// <summary>
-/// Defines operations for managing audit log data in the database.
+/// Defines operations for managing order book snapshots data in the database.
 /// </summary>
 public interface IAuditLogRepository
 {

@@ -12,9 +12,11 @@
     <div class="text-secondary" :style="{ visibility: loading ? 'visible' : 'hidden' }">
       Loading data...
     </div>
+
     <div v-if="error" class="alert alert-danger">
       {{ error }}
     </div>
+
     <div v-if="data" class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>{{ data?.primaryCurrency + '/' + data?.secondaryCurrency }}</span>
@@ -156,6 +158,8 @@ const notEnoughLiquidity = ref(false)
 // Calculate total cost based on order book
 function calculateTotal() {
   const amountNum = parseFloat(amount.value)
+
+  // checking for valid input
   if (isNaN(amountNum) || amountNum <= 0) {
     totalCost.value = 0
     avgPrice.value = 0
@@ -232,6 +236,7 @@ function startRefreshTimer() {
   timeToRefresh.value = 10
   updateSpinnerOffset()
 
+  // restarting if any was active
   stopRefreshTimer()
 
   refreshTimer = setInterval(() => {

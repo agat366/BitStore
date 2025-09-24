@@ -9,6 +9,9 @@ using Xunit;
 
 namespace BitStore.Core.Tests.Services;
 
+/// <summary>
+/// Tests covering key logic of <see cref="CoreService"/>.
+/// </summary>
 public class CoreServiceTests
 {
     private readonly Mock<IBitstampService> _bitstampMock;

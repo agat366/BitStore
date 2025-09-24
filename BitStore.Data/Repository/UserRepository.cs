@@ -3,17 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BitStore.Data.Repository;
 
-/// <summary>
-/// Implements user data persistence operations using Entity Framework Core.
-/// </summary>
-public class UserRepository : IUserRepository
+/// <inheritdoc cref="IUserRepository" />
+public class UserRepository(BitStoreDbContext context) : IUserRepository
 {
-    private readonly BitStoreDbContext _context;
-
-    public UserRepository(BitStoreDbContext context)
-    {
-        _context = context;
-    }
+    private readonly BitStoreDbContext _context = context;
 
     public async Task<User?> GetByIdAsync(Guid id)
     {

@@ -1,7 +1,7 @@
 <template>
   <div class="order-book d-flex">
     <!-- Bids (Buy Orders) -->
-    <div class="order-column me-4">
+    <div class="me-4">
       <h6 class="text-center mb-3">Bids</h6>
       <div class="bars-container">
         <div class="bars-grid">
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Asks (Sell Orders) -->
-    <div class="order-column ms-4">
+    <div class="ms-4">
       <h6 class="text-center mb-3">Asks</h6>
       <div class="bars-container">
         <div class="bars-grid">
@@ -63,10 +63,6 @@ const aggregatedAsks = computed(() => {
 .order-book {
   padding: 1rem;
   justify-content: center;
-}
-
-.order-column {
-  /*width: 400px;*/
 }
 
 .bars-container {

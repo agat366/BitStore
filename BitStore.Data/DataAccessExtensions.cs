@@ -5,7 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BitStore.Data;
 
-public static class ServiceCollectionExtensions
+/// <summary>
+/// Provides extension methods for configuring data access services in an application.
+/// </summary>
+/// <remarks>This static class contains methods to simplify the registration of data access services,  such as
+/// database contexts and repositories, in an application's dependency injection container etc.</remarks>
+public static class DataAccessExtensions
 {
     public static IServiceCollection AddBitStoreData(
         this IServiceCollection services,

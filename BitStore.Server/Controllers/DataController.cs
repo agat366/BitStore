@@ -12,21 +12,12 @@ namespace BitStore.Server.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class DataController : ControllerBase
+    public class DataController(ICoreService coreService, IUserContext user) : ControllerBase
     {
-        private readonly IUserContext _user;
-        private readonly ICoreService _coreService;
-
-        public DataController(ICoreService coreService, IUserContext user)
-        {
-            _coreService = coreService;
-            _user = user;
-        }
-
         [HttpGet(Name = "GetData")]
         public async Task<ActionResult<OrderBook>> Get()
         {
-            var orderBook = await _coreService.GetLatestOrderBookAsync(_user.UserId);
+            var orderBook = await coreService.GetLatestOrderBookAsync(user.UserId);
 
             if (orderBook == null)
             {

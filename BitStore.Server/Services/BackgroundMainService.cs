@@ -6,21 +6,13 @@ namespace BitStore.Server.Services;
 /// <summary>
 /// Background service that periodically polls and updates order book data.
 /// </summary>
-public class BackgroundMainService : BackgroundService
+public class BackgroundMainService(
+    IServiceScopeFactory scopeFactory,
+    ILogger<BackgroundMainService> logger,
+    IOptions<PollingSettings> settings)
+    : BackgroundService
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<BackgroundMainService> _logger;
-    private readonly PollingSettings _settings;
-
-    public BackgroundMainService(
-        IServiceScopeFactory scopeFactory,
-        ILogger<BackgroundMainService> logger,
-        IOptions<PollingSettings> settings)
-    {
-        _scopeFactory = scopeFactory;
-        _logger = logger;
-        _settings = settings.Value;
-    }
+    private readonly PollingSettings _settings = settings.Value;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -28,13 +20,13 @@ public class BackgroundMainService : BackgroundService
         {
             try
             {
-                using var scope = _scopeFactory.CreateScope();
+                using var scope = scopeFactory.CreateScope();
                 var coreService = scope.ServiceProvider.GetRequiredService<ICoreService>();
                 await coreService.PollDataAsync(stoppingToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while polling data");
+                logger.LogError(ex, "Error occurred while polling data");
             }
 
             await Task.Delay(TimeSpan.FromSeconds(_settings.UpdateIntervalSeconds), stoppingToken);
