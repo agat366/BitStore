@@ -52,8 +52,13 @@ public class Program
         
         var httpClientBuilder = builder.Services.AddHttpClient<IBitstampService, BitstampService>();
 #if DEBUG
-        builder.Services.AddTransient<LoggingHandler>();
-        httpClientBuilder.AddHttpMessageHandler<LoggingHandler>();
+        // Add LoggingHandler only when Trace level is enabled
+        if (builder.Configuration.GetValue<string>("Logging:LogLevel:Default")?.Equals("Trace", StringComparison.OrdinalIgnoreCase) == true ||
+            builder.Configuration.GetValue<string>("Logging:LogLevel:BitStore.Server")?.Equals("Trace", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            builder.Services.AddTransient<LoggingHandler>();
+            httpClientBuilder.AddHttpMessageHandler<LoggingHandler>();
+        }
 #endif
 
         // Change the order of service registration for clarity

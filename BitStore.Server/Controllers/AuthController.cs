@@ -7,9 +7,6 @@ namespace BitStore.Server.Controllers;
 /// <summary>
 /// Handles authentication endpoints.
 /// </summary>
-/// <remarks>
-/// Controller handling user authentication and token management.
-/// </remarks>
 [ApiController]
 [Route("[controller]")]
 public class AuthController : ControllerBase
@@ -26,7 +23,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Authenticates a user and returns a JWT token
+    /// Authenticates a user and returns a JWT token (currently using a primitive approach (with username only) just for multi-user UI purpose).
     /// </summary>
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)

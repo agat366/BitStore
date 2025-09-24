@@ -72,6 +72,8 @@ public class CoreService : ICoreService
             using var scope = _scopeFactory.CreateScope();
 
 #pragma warning disable CS4014 // We must not wait until the snapshot is stored, doing that in the background
+            // In real world, we would use a proper background job processing library or some conveyor pattern.
+            // But here is demonstrating that we should not spend time for storing the snapshot while the user waits for the response.
             Task.Run(async () =>
             {
                 try

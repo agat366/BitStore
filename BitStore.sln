@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Bitstamp", "BitSto
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "BitStore.Client", "BitStore.Client\BitStore.Client.esproj", "{7417FF4E-BCF6-FD66-3241-0C6870B1BD36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStore.Core.Tests", "BitStore.Core.Tests\BitStore.Core.Tests.csproj", "{DA849E11-9FA4-4410-9017-9527C1403AF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
